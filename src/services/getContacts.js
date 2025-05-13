@@ -18,21 +18,21 @@ export async function getAllContacts() {
 export async function getContactById(contactId) {
     try {
         const contactById = await Contact.findById(contactId);
+        
         if (!contactById) {
             return {
               status: 404,
               message: "Contact not found",
               data: null,
             };
-          }
+        }
+        console.log(contactById);
         return {
             status: 200,
-            message: "Successfully found contact with id {contactId}!",
-            data: {
-                contactById
-              }
-        }
-        ;
+            message: `Successfully found contact with id ${contactById._id}!`,
+            data: contactById
+              
+        };
     } catch (error) {
         console.log(error);
     }
