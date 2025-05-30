@@ -2,14 +2,16 @@ import Joi from 'joi';
 
 export const contactsSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
-  year: Joi.number().required(),
-  gender: Joi.string().valid('male', 'female').required(),
-  onDuty: Joi.boolean(),
+  phoneNumber: Joi.number().required(),
+  email: Joi.string().required(),
+  isFavourite: Joi.boolean(),
+  contactType: Joi.string().valid(`work`, `home`, `personal`)
 });
 
 export const updateContactSchema = Joi.object({
   name: Joi.string().min(3).max(20),
-  year: Joi.number(),
-  gender: Joi.string().valid('male', 'female'),
-  onDuty: Joi.boolean(),
+  phoneNumber: Joi.number(),
+  email: Joi.string(),
+  isFavourite: Joi.boolean(),
+  contactType: Joi.string().valid(`work`, `home`, `personal`)
 });
