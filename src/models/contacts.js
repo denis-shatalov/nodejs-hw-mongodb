@@ -21,7 +21,11 @@ const contactsSchema = new mongoose.Schema({
         enum: [`work`, `home`, `personal`],
         required: true,
         default: "personal"
-    }
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+      },
 },
     {
         timestamps: true,

@@ -6,7 +6,7 @@ import { getAllContacts, getContactById, createContact, updateContact, deleteCon
 export async function getContactsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
-    const result = await getAllContacts({page, perPage, sortBy,sortOrder});
+    const result = await getAllContacts({page, perPage, sortBy,sortOrder,userId: req.user.id,});
     res.status(200).json({
       status: 200,
       message: 'Successfully found contacts!',
@@ -31,7 +31,7 @@ export async function getContactByIdController(req, res) {
 }
   
 export async function createContactController(req, res) {
-  const contact = await createContact(req.body);
+  const contact = await createContact({ ...req.body, userId: req.user.id });
 
   res.status(201).json({
 		status: 201,
