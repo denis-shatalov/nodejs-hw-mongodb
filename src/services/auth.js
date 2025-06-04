@@ -10,7 +10,7 @@ export async function registerUser(payload) {
   const user = await User.findOne({ email: payload.email });
 
   if (user !== null) {
-    throw new createHttpError(409,'Email in use');
+    throw createHttpError(409,'Email in use');
   }
 
   payload.password = await bcrypt.hash(payload.password, 10);
@@ -24,13 +24,13 @@ export async function loginUser(email, password) {
     const user = await User.findOne({ email });
   
     if (user === null) {
-      throw new createHttpError(401, 'Email or password is incorrect');
+      throw createHttpError(401, 'Email or password is incorrect');
     }
   
     const isMatch = await bcrypt.compare(password, user.password);
   
     if (isMatch !== true) {
-      throw new createHttpError(401,'Email or password is incorrect');
+      throw createHttpError(401,'Email or password is incorrect');
     }
   
     await Session.deleteOne({ userId: user._id });
@@ -49,14 +49,10 @@ export async function loginUser(email, password) {
   }
   
   export async function refreshSession(sessionId, refreshToken) {
-    const session = await Session.findOne({ _id: sessionId });
+    const session = await Session.findOne({ _id: sessionId, refreshToken });
   
     if (session === null) {
       throw new createHttpError.Unauthorized('Session not found');
-    }
-  
-    if (session.refreshToken !== refreshToken) {
-      throw new createHttpError.Unauthorized('Refresh token is invalid');
     }
   
     if (session.refreshTokenValidUntil < new Date()) {
