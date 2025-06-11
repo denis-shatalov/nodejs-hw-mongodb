@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 import cookieParser from 'cookie-parser';
+import path from 'node:path';
 
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
@@ -12,6 +13,8 @@ import authRouter from "./routers/auth.js";
 export async function setupServer() {
   const PORT = 3000;
   const app = express();
+
+  app.use('/photo', express.static(path.resolve('src', 'upload', 'photo')));
 
   app.use(cookieParser());
   app.use(cors());
