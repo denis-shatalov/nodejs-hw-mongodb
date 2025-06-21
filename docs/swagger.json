@@ -106,29 +106,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Contact delete successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Contact delete successfully"
-                    }
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "Contacts delete"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -262,8 +241,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "email",
-                  "photo"
+                  "email"
                 ],
                 "properties": {
                   "name": {
@@ -295,8 +273,7 @@
                   "photo": {
                     "type": "string",
                     "format": "binary",
-                    "description": "Contact photo",
-                    "example": "https://res.cloudinary.com/dbidpmkqe/image/upload/v1749681002/bp6ug7s60tcjemn8gve4.jpg"
+                    "description": "Contact photo"
                   }
                 }
               }
@@ -304,7 +281,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Created a contact",
             "content": {
               "application/json": {
@@ -318,7 +295,7 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 201
                     },
                     "message": {
                       "type": "string",
@@ -390,11 +367,31 @@
               ],
               "example": "home"
             }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "example": "name"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Get all contacts",
+            "description": "Successfully found contacts!",
             "content": {
               "application/json": {
                 "schema": {
@@ -414,7 +411,48 @@
                       "example": "Successfully found contacts!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/contact"
+                      "type": "object",
+                      "required": [
+                        "data",
+                        "page",
+                        "perPage",
+                        "totalItems",
+                        "totalPages",
+                        "hasNextPage",
+                        "hasPreviousPage"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/contact"
+                          }
+                        },
+                        "page": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "perPage": {
+                          "type": "number",
+                          "example": 10
+                        },
+                        "totalItems": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "totalPages": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
                     }
                   }
                 }

@@ -31,9 +31,20 @@ parameters:
       type: string
       enum: ['home', 'work', 'personal']
       example: home
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      example: 'name'
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: ['asc', 'desc']
+      example: 'asc'
 responses:
   '200':
-    description: Get all contacts
+    description: Successfully found contacts!
     content:
       application/json:
         schema:
@@ -50,6 +61,37 @@ responses:
               type: string
               example: Successfully found contacts!
             data:
-              $ref: ../../components/schemas/contact.yaml
+              type: object
+              required:
+                - data
+                - page
+                - perPage
+                - totalItems
+                - totalPages
+                - hasNextPage
+                - hasPreviousPage
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/schemas/contact.yaml'
+                page:
+                  type: number
+                  example: 1
+                perPage:
+                  type: number
+                  example: 10
+                totalItems:
+                  type: number
+                  example: 1
+                totalPages:
+                  type: number
+                  example: 1
+                hasNextPage:
+                  type: boolean
+                  example: false
+                hasPreviousPage:
+                  type: boolean
+                  example: true
   '404':
-    $ref: ../../components/responses/404.yaml
+    $ref: '../../components/responses/404.yaml'

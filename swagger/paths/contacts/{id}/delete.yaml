@@ -13,21 +13,7 @@ parameters:
       type: string
       example: 507f1f77bcf86cd799439011
 responses:
-  '200':
-    description: Contact delete successfully
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - status
-            - message
-          properties:
-            status:
-              type: integer
-              example: 200
-            message:
-              type: string
-              example: Contact delete successfully
+  '204':
+    description: Contacts delete
   '404':
-    $ref: ../../../components/responses/404.yaml
+    $ref: '../../../components/responses/404.yaml'
