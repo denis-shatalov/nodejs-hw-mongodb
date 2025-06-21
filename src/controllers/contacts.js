@@ -35,33 +35,26 @@ export async function getContactByIdController(req, res) {
   });
 }
   
-export async function createContactController(req, res) {
-  let photo = null;
-
-  if (getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true') {
-    const result = await uploadToCloudinary(req.file.path);
-    await fs.unlink(req.file.path);
-
-    photo = result.secure_url;
-  } else {
-    await fs.rename(
-      req.file.path,
-      path.resolve('src', 'uploads', 'photo', req.file.filename),
-    );
-
-    photo = `http://localhost:3000/photo/${req.file.filename}`;
+export const createContactController = async (req, res) => {
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await uploadToCloudinary(photo);
   }
-  
   const userId = req.user.id;
-  const contact = await createContact({ ...req.body, userId, photo});
 
+  const contact = await createContact({
+    ...req.body,
+    userId,
+    photo: photoUrl,
+  });
   res.status(201).json({
-		status: 201,
-		message: "Successfully created a contact!",
-		data: contact
-}
-);
-}
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: contact,
+  });
+};
+
 
 export async function updateContactController(req, res) {
   const { contactId } = req.params;
@@ -127,4 +120,3 @@ export async function deleteContactController(req, res) {
 
   res.status(204).end();
 }
-
