@@ -36,24 +36,38 @@ export async function getContactByIdController(req, res) {
 }
   
 export const createContactController = async (req, res) => {
-  const photo = req.file;
-  let photoUrl;
-  if (photo) {
-    photoUrl = await uploadToCloudinary(photo);
-  }
-  const userId = req.user.id;
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ status: 401, message: 'Unauthorized: user not found' });
+    }
 
-  const contact = await createContact({
-    ...req.body,
-    userId,
-    photo: photoUrl,
-  });
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully created a contact!',
-    data: contact,
-  });
+    let photoUrl = null;
+    if (req.file && req.file.path) {
+      const uploadResult = await uploadToCloudinary(req.file.path);
+      photoUrl = uploadResult.secure_url;
+    }
+
+    const contact = await createContact({
+      ...req.body,
+      userId,
+      photo: photoUrl,
+    });
+
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully created a contact!',
+      data: contact,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: 'Something went wrong',
+      data: error.message,
+    });
+  }
 };
+
 
 
 export async function updateContactController(req, res) {
